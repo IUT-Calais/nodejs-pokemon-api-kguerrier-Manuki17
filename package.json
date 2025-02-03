@@ -13,14 +13,17 @@
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "test": "jest --runInBand",
-    "test:coverage": "jest --coverage --runInBand"
+    "test:coverage": "jest --coverage --runInBand",
+    
+    "db:seed": ""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vfourny/nodejs-pokedex-api.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Chagot Manon",
+  "mail": "manonchagot17@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vfourny/nodejs-pokedex-api/issues"
