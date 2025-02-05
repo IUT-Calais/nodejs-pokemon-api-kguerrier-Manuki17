@@ -1,9 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import { connect } from 'http2';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  // Suppression de tous les posts
+  await prisma.pokemonCard.deleteMany();
   await prisma.type.deleteMany();
+
+  // Création de plusieurs types avec createMany
   await prisma.type.createMany({
     data: [
       { name: 'Normal' },
@@ -25,6 +30,19 @@ async function main() {
       { name: 'Steel' },
       { name: 'Fairy' },
     ],
+  });
+
+  // Création d'un' Pokémon avec create
+  await prisma.pokemonCard.create({
+    data: {
+      name:"Bulbizarre",
+      pokedexId:1,
+      type: { connect : {id : 3} }, // Référence à l'id de la table types
+      lifePoints:45,
+      size:0.7,
+      weight:6.9,
+      imageUrl:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png"
+    }
   });
 
   console.log('Seed completed!');

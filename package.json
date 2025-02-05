@@ -13,9 +13,7 @@
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "test": "jest --runInBand",
-    "test:coverage": "jest --coverage --runInBand",
-    
-    "db:seed": ""
+    "test:coverage": "jest --coverage --runInBand"
   },
   "repository": {
     "type": "git",
