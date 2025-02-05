@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   // Suppression de tous les posts
   await prisma.pokemonCard.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.type.deleteMany();
 
   // Création de plusieurs types avec createMany
@@ -32,7 +33,7 @@ async function main() {
     ],
   });
 
-  // Création d'un' Pokémon avec create
+  // Création d'un Pokémon avec create
   await prisma.pokemonCard.create({
     data: {
       name:"Bulbizarre",
@@ -44,6 +45,14 @@ async function main() {
       imageUrl:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png"
     }
   });
+
+  // Création du User Admin
+  await prisma.user.create({
+    data: {
+      email: "admin@gmail.com",
+      password: "admin"
+    }
+  })
 
   console.log('Seed completed!');
 }
