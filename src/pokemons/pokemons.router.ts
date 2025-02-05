@@ -2,24 +2,22 @@ import { Router } from 'express';
 
 import  { 
     getPokemonsCards,
-    getPokemon,
+    getPokemonId,
     createPokemon,
     updatePokemon,
     deletePokemon 
 } from './pokemons.controller';
 
-
-export const pokemonsRouter = Router();
 export const pokemonRouter = Router();
 
-pokemonsRouter.get('/', getPokemonsCards)
+// --- Configuration des routes -----------------------------------
+pokemonRouter.get('/', getPokemonsCards)
 
-pokemonsRouter.get('/:productID', getPokemon)
+pokemonRouter.get('/:pokemonCardId', getPokemonId)
 
 pokemonRouter.post('/', createPokemon) 
 
-pokemonRouter.put('/:productID', updatePokemon) 
+pokemonRouter.patch('/:pokemonCardId', updatePokemon) 
 
-pokemonRouter.delete('/:productID', deletePokemon)
-
-module.exports = pokemonsRouter
+pokemonRouter.delete('/:pokemonCardId', deletePokemon)
+// ----------------------------------------------------------------
