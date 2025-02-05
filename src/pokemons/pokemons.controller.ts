@@ -33,7 +33,7 @@ export const getPokemonId = async (req: Request, res: Response) => {
 }
 
 export const createPokemon = async (req: Request, res: Response) => {
-    const { name, pokedexId, type, lifePoints, size, weight, imageUrl} = req.body;
+    const { name, pokedexId, type, lifePoints, size, weight, imageUrl } = req.body;
     try {
         const pokemonName = await prisma.pokemonCard.findUnique({
             where: {name: String(name)}
@@ -92,7 +92,7 @@ export const createPokemon = async (req: Request, res: Response) => {
 
 export const updatePokemon = async (req: Request, res: Response) => {
     const { pokemonCardId } = req.params;
-    const { name, pokedexId, type, lifePoints, size, weight, imageUrl} = req.body;
+    const { name, pokedexId, type, lifePoints, size, weight, imageUrl } = req.body;
     let pokemonType = null;
     try {
         const pokemonName = await prisma.pokemonCard.findUnique({

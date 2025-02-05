@@ -11,13 +11,13 @@ import  {
 export const pokemonRouter = Router();
 
 // --- Configuration des routes -----------------------------------
-pokemonRouter.get('/', getPokemonsCards)
+pokemonRouter.get('/', getPokemonsCards);
 
-pokemonRouter.get('/:pokemonCardId', getPokemonId)
+pokemonRouter.get('/:pokemonCardId', getPokemonId);
 
-pokemonRouter.post('/', createPokemon) 
+pokemonRouter.post('/', createPokemon);
 
-pokemonRouter.patch('/:pokemonCardId', updatePokemon) 
+pokemonRouter.patch('/:pokemonCardId', updatePokemon);
 
-pokemonRouter.delete('/:pokemonCardId', deletePokemon)
+pokemonRouter.delete('/:pokemonCardId', deletePokemon);
 // ----------------------------------------------------------------
