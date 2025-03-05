@@ -1,3 +1,8 @@
+/*
+Autrice : Manon Chagot
+Classe : BUT 2 APP
+Année : 2025
+*/
 import { PrismaClient } from '@prisma/client';
 import { connect } from 'http2';
 const bcrypt = require('bcrypt');
@@ -5,12 +10,12 @@ const bcrypt = require('bcrypt');
 const prisma = new PrismaClient();
 
 async function main() {
-  // Suppression de tous les posts
+  // -- Suppression de tous les posts
   await prisma.pokemonCard.deleteMany();
   await prisma.user.deleteMany();
   await prisma.type.deleteMany();
 
-  // Création de plusieurs types avec createMany
+  // -- Création de plusieurs types avec createMany
   await prisma.type.createMany({
     data: [
       { name: 'Normal' },
@@ -34,7 +39,7 @@ async function main() {
     ],
   });
 
-  // Création d'un Pokémon avec create
+  // -- Création d'un Pokémon avec create
   await prisma.pokemonCard.create({
     data: {
       name:"Bulbizarre",
@@ -47,7 +52,7 @@ async function main() {
     }
   });
 
-  // Création du User Admin
+  // -- Création du User Admin
   await prisma.user.create({
     data: {
       email: "admin@gmail.com",

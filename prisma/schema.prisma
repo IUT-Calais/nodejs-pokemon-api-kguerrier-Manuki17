@@ -1,3 +1,8 @@
+/*
+Autrice : Manon Chagot
+Classe : BUT 2 APP
+Année : 2025
+*/
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,12 +12,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// -- Table des types de Pokémons
 model Type {
   id   Int    @id @default(autoincrement())
   name String @unique
   pokemonCard PokemonCard[]
 }
 
+// -- Table des cartes Pokémon
 model PokemonCard {
   id Int @id @default(autoincrement())
   name String @unique
@@ -25,6 +32,7 @@ model PokemonCard {
   imageUrl String?
 }
 
+// -- Table des utilisateurs
 model User {
   id Int @id @default(autoincrement())
   email String @unique
