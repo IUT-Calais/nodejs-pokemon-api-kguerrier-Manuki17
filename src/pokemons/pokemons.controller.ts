@@ -25,8 +25,9 @@ export const getPokemonId = async (req: Request, res: Response) => {
             where: {id: Number(pokemonCardId)}
         });
 
-        if (!pokemon){
-            res.status(404).send(`Pokémon ${pokemonCardId} non trouvé.`);
+        // Pokémon non trouvé.
+        if (pokemon === null){
+            res.status(404).json(`Pokémon ${pokemonCardId} non trouvé.`);
         }
 
         // Succès de la recherche.
@@ -35,15 +36,24 @@ export const getPokemonId = async (req: Request, res: Response) => {
         }
         
     } catch (error) {
-        res.status(404).send(`Erreur serveur : ${error}`);
+        res.status(500).send(`Erreur serveur : ${error}`);
     }
 }
 // ------------------------------------------------------------------
 
 // --- Création d'un Pokémon ----------------------------------------
 export const createPokemon = async (req: Request, res: Response) => {
-    const { name, pokedexId, type, lifePoints, size, weight, imageUrl } = req.body;
+    const { name, pokedexId, typeId, lifePoints, size, weight, imageUrl } = req.body;
     try {
+        if (name === undefined || pokedexId === undefined || typeId === undefined || lifePoints === undefined) {
+            const missingFields = [];
+            if (!name) missingFields.push('name');
+            if (!pokedexId) missingFields.push('pokedexId');
+            if (!typeId) missingFields.push('type');
+            if (!lifePoints) missingFields.push('lifePoints');
+            res.status(400).send(`Veuillez remplir les champs suivants: ${missingFields.join(', ')}`);
+        }
+
         const pokemonName = await prisma.pokemonCard.findUnique({
             where: {name: String(name)}
         });
@@ -53,29 +63,20 @@ export const createPokemon = async (req: Request, res: Response) => {
         });
 
         const pokemonType = await prisma.type.findUnique({
-            where: {id: Number(type)}
+            where: {id: Number(typeId)}
         });
 
 
         if (pokemonName) { 
-            res.status(400).send(`Le Pokémon ${name} existe déjà.`);
+            res.status(400).json(`Le Pokémon ${name} existe déjà.`);
         }
 
         else if (pokeId) { 
-            res.status(400).send(`Le Pokémon ${pokedexId} existe déjà.`);
+            res.status(400).json(`Le Pokémon ${pokedexId} existe déjà.`);
         }
 
         else if (pokemonType === null) {
-            res.status(400).send(`Le type ${type} n'existe pas.`);
-        }
-    
-        else if (pokemonName === undefined || pokeId === undefined || pokemonType === undefined || lifePoints === undefined) {
-            const missingFields = [];
-            if (!pokemonName) missingFields.push('name');
-            if (!pokeId) missingFields.push('pokedexId');
-            if (!pokemonType) missingFields.push('type');
-            if (!lifePoints) missingFields.push('lifePoints');
-            res.status(400).send(`Veuillez remplir les champs suivants: ${missingFields.join(', ')}`);
+            res.status(400).json(`Le type ${typeId} n'existe pas.`);
         }
 
         // Succès de la création.
@@ -84,18 +85,18 @@ export const createPokemon = async (req: Request, res: Response) => {
                 data: {
                   name: name,
                   pokedexId: pokedexId,
-                  type: { connect : {id : type} },
+                  type: { connect : {id : typeId} },
                   lifePoints: lifePoints,
                   size: size,
                   weight: weight,
                   imageUrl: imageUrl
                 }
               });
-            res.status(201).send(`Pokémon ${name} créé avec succès.`);
+            res.status(201).json(`Pokémon ${name} créé avec succès.`);
         }
          
     } catch (error) {
-        res.status(404).send(`Erreur serveur : ${error}`);
+        res.status(500).send(`Erreur serveur : ${error}`);
     }
 }
 // ------------------------------------------------------------------
@@ -152,7 +153,7 @@ export const updatePokemon = async (req: Request|any, res: Response|any) => {
             where: { id: Number(pokemonCardId) },
             data: data
         });
-        res.status(200).send(`Pokémon ${pokemonCardId} mis à jour avec succès.`);
+        res.status(200).json(`Pokémon ${pokemonCardId} mis à jour avec succès.`);
         
     } catch (error) {
         res.status(500).send(`Erreur serveur : ${error}`);
@@ -164,14 +165,22 @@ export const updatePokemon = async (req: Request|any, res: Response|any) => {
 export const deletePokemon = async (req: Request, res: Response) => {
     const { pokemonCardId } = req.params;
     try {
-        const pokemon = await prisma.pokemonCard.delete({
+        const pokemon = await prisma.pokemonCard.findUnique({
             where: {id: Number(pokemonCardId)}
         });
-        
-        res.status(204).send(`Pokémon ${pokemonCardId} supprimé : ${pokemon?.name}`);
+
+        // Pokémon non trouvé.
+        if (pokemon === null){
+            res.status(404).json(`Pokémon ${pokemonCardId} non trouvé.`);
+        }
+
+        // Succès de la suppression.
+        else{
+            res.status(204).send();
+        }
 
     } catch (error) {
-        res.status(404).send(`Pokémon ${pokemonCardId} non trouvé.`);
+        res.status(500).send(`Erreur serveur : ${error}`);
     }
 }
 // ------------------------------------------------------------------
