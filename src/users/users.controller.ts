@@ -48,7 +48,7 @@ export const createUser = async (req: Request, res: Response) => {
                   password: await bcrypt.hash(password, 10)
                 }
               });
-            res.status(201).send(`Utilisateur créé avec succès.`);
+            res.status(201).json(`Utilisateur créé avec succès.`);
         }
          
     } catch (error) {

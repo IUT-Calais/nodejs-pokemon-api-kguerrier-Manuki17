@@ -94,7 +94,10 @@ describe('PokemonCard API', () => {
       };
 
       prismaMock.pokemonCard.create.mockResolvedValue(createdPokemonCard);
-      const response = await request(app).post('/pokemon-cards').send(createdPokemonCard);
+      const response = await request(app)
+        .post('/pokemon-cards')
+        .set('Authorization', `Bearer mockedToken`)
+        .send(createdPokemonCard);
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual('Pokémon Evoli créé avec succès.');
@@ -147,7 +150,7 @@ describe('PokemonCard API', () => {
       expect(response.status).toBe(204);
     });
 
-    
+
     it('should return 404 if PokemonCard is not found', async () => {
 
       prismaMock.pokemonCard.findUnique.mockResolvedValue(null);
