@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Pokémon API
   version: 1.0.0
-  description: API pour gérer les cartes Pokémon et les utilisateurs
+  description: API pour gérer les cartes Pokémon et les utilisateurs. Réalisé par Manon Chagot, BUT 2 APP.
 servers:
   - url: http://localhost:3000
     description: Serveur local
@@ -42,6 +42,82 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
   
+  /users/{userId}:
+    get:
+      summary: Récupérer un utilisateur par son ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Utilisateur trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Utilisateur non trouvé
+        '500':
+          description: Erreur serveur
+    patch:
+      summary: Mettre à jour un utilisateur
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: newemail@example.com
+                password:
+                  type: string
+                  example: NewP@ssword123!
+      responses:
+        '200':
+          description: Utilisateur mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Données invalides
+        '404':
+          description: Utilisateur non trouvé
+        '500':
+          description: Erreur serveur
+    delete:
+      summary: Supprimer un utilisateur
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Utilisateur supprimé avec succès
+        '404':
+          description: Utilisateur non trouvé
+        '500':
+          description: Erreur serveur
+  
   /users/login:
     post:
       summary: Connecter un utilisateur et retourner un token JWT
@@ -57,7 +133,7 @@ paths:
                   example: user@example.com
                 password:
                   type: string
-                  example: password123
+                  example: P@ssword123!
       responses:
         '200':
           description: Connexion réussie

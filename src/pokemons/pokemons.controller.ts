@@ -176,6 +176,9 @@ export const deletePokemon = async (req: Request, res: Response) => {
 
         // Succès de la suppression.
         else{
+            await prisma.pokemonCard.delete({
+                where: { id: Number(pokemonCardId) }
+            });
             res.status(204).send();
         }
 
