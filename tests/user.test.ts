@@ -33,6 +33,34 @@ describe('User API', () => {
     });
 // ------------------------------------------------------------------
 
+// --- Tests : "fecth by ID" ----------------------------------------
+  describe('GET /users/:userId', () => {
+    it('should fetch a User by ID', async () => {
+      const mockUser = {
+          id: 1,
+          email: "manon@iut.fr",
+          password: "Iut751!"
+      };
+
+      prismaMock.user.findUnique.mockResolvedValue(mockUser);
+      const response = await request(app).get('/users/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUser);
+    });
+
+
+    it('should return 404 if User is not found', async () => {
+
+      prismaMock.user.findUnique.mockResolvedValue(null);
+      const response = await request(app).get('/users/173');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual('Utilisateur 173 non trouvé.' );
+    });
+  });
+// ------------------------------------------------------------------
+
 // --- Tests : "create a new User" ----------------------------------
   describe('POST /users', () => {
     it('should create a new User', async () => {
@@ -65,6 +93,33 @@ describe('User API', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({message: "Connexion réussie !", token: 'mockedToken' });
+    });
+  });
+// ------------------------------------------------------------------
+
+// --- Tests : "delete by ID" ---------------------------------------
+  describe('DELETE /users/:userId', () => {
+    it('should delete a User', async () => {
+      const deletedUser = {
+        id: 1,
+        email: "manon@mail.fr",
+        password: "1234!"
+      };
+
+      prismaMock.user.create.mockResolvedValue(deletedUser);
+      const response = await request(app).delete('/users/1');
+
+      expect(response.status).toBe(204);
+    });
+
+
+    it('should return 404 if User is not found', async () => {
+
+      prismaMock.user.findUnique.mockResolvedValue(null);
+      const response = await request(app).delete('/users/173');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual('Utilisateur 173 non trouvé.' );
     });
   });
 // ------------------------------------------------------------------
