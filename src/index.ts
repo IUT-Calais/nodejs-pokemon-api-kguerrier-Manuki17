@@ -13,6 +13,9 @@ Année : 2025
 import express from 'express';
 import { pokemonRouter } from './pokemons/pokemons.router';
 import { userRouter } from './users/users.router';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
 
 export const app = express();
 const port = process.env.PORT || 3000;
@@ -25,7 +28,10 @@ export function stopServer() {
   server.close();
 }
 
+const swaggerDocument = YAML.load(path.join(__dirname, './swagger.yaml'));
+
 // --- Configuration des routes -----------------------------------
 app.use('/pokemon-cards', pokemonRouter); 
 app.use('/users', userRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // ----------------------------------------------------------------

@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: Pokémon API
+  version: 1.0.0
+  description: API pour gérer les cartes Pokémon et les utilisateurs
+servers:
+  - url: http://localhost:3000
+    description: Serveur local
+paths:
+  /users:
+    get:
+      summary: Récupérer la liste utilisateurs
+      responses:
+        '200':
+          description: Liste des utilisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Créer un nouvel utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: P@ssword123!
+      responses:
+        '201':
+          description: Utilisateur créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  
+  /users/login:
+    post:
+      summary: Connecter un utilisateur et retourner un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsIn..."
+        '400':
+          description: Identifiants incorrects
+  
+  /pokemon-cards:
+    get:
+      summary: Récupérer la liste des cartes Pokémon
+      responses:
+        '200':
+          description: Liste des cartes Pokémon
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PokemonCard'
+    post:
+      summary: Créer une nouvelle carte Pokémon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PokemonCard'
+      responses:
+        '201':
+          description: Carte Pokémon créée avec succès
+  
+  /pokemon-cards/{pokemonCardId}:
+    get:
+      summary: Récupérer une carte Pokémon par son ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pokemonCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Carte trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PokemonCard'
+        '404':
+          description: Carte non trouvée
+    patch:
+      summary: Mettre à jour une carte Pokémon
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pokemonCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PokemonCard'
+      responses:
+        '200':
+          description: Carte mise à jour avec succès
+    delete:
+      summary: Supprimer une carte Pokémon
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pokemonCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Carte supprimée avec succès
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          example: password123
+    PokemonCard:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Pikachu
+        pokedexId:
+          type: integer
+          example: 25
+        typeId:
+          type: integer
+          example: 1
+        lifePoints:
+          type: integer
+          example: 60
+        size:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6.0
+        imageUrl:
+          type: string
+          example: "https://example.com/pikachu.png"
